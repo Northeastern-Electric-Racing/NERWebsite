@@ -1,12 +1,13 @@
-function App() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-neutral-950 text-neutral-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight">Northeastern Electric Racing</h1>
-        <p className="mt-2 text-neutral-400">Site under construction.</p>
-      </div>
-    </div>
-  );
-}
+import { Routes, Route } from 'react-router-dom'
+import Layout from './components/Layout'
+import Home from './pages/Home'
 
-export default App;
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+    </Routes>
+  )
+}
