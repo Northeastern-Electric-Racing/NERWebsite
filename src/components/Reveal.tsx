@@ -1,31 +1,30 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import type { ReactNode } from 'react'
-import { revealIn, prefersReducedMotion } from '../lib/motion'
+import { gsap, useGSAP } from '../lib/gsap'
 
-export default function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
+export default function Reveal({ children, className = '', y = 28 }: { children: ReactNode; className?: string; y?: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const startHidden = useRef(!prefersReducedMotion())
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el || !startHidden.current) return
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            revealIn(el)
-            obs.unobserve(el)
-          }
+  useGSAP(
+    () => {
+      const el = ref.current
+      if (!el) return
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from(el, {
+          opacity: 0,
+          y,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', once: true },
         })
-      },
-      { threshold: 0.15 },
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+      })
+    },
+    { scope: ref },
+  )
 
   return (
-    <div ref={ref} className={className} style={{ opacity: startHidden.current ? 0 : 1 }}>
+    <div ref={ref} className={className}>
       {children}
     </div>
   )

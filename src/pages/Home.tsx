@@ -1,35 +1,156 @@
-import { useEffect, useRef } from 'react'
-import { animate, stagger, prefersReducedMotion } from '../lib/motion'
+import { useRef } from 'react'
+import { gsap, useGSAP } from '../lib/gsap'
 import Reveal from '../components/Reveal'
+import SectionHeading from '../components/SectionHeading'
+import CountUp from '../components/CountUp'
+import { SITE, VALUES, STATS, CHAPTERS } from '../data/content'
 
 function Hero() {
-  const scope = useRef<HTMLElement>(null)
-  const played = useRef(false)
+  const root = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    if (played.current || prefersReducedMotion()) return
-    played.current = true
-    const els = scope.current!.querySelectorAll<HTMLElement>('[data-hero]')
-    animate(els, {
-      opacity: [0, 1],
-      translateY: [22, 0],
-      duration: 720,
-      delay: stagger(110, { start: 120 }),
-      ease: 'out(3)',
-    })
-  }, [])
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from('[data-hero]', {
+          opacity: 0,
+          y: 24,
+          duration: 0.8,
+          ease: 'power3.out',
+          stagger: 0.12,
+          delay: 0.1,
+        })
+      })
+    },
+    { scope: root },
+  )
 
   return (
-    <section ref={scope} className="flex min-h-screen flex-col justify-center px-6">
-      <p data-hero className="font-head text-xs uppercase tracking-widest text-racing" style={{ opacity: 0 }}>
+    <section ref={root} className="flex min-h-screen flex-col justify-center px-6">
+      <p data-hero className="font-head text-xs uppercase tracking-widest text-racing">
         Northeastern University · Formula EV
       </p>
-      <h1 data-hero className="mt-4 text-7xl" style={{ opacity: 0 }}>
+      <h1 data-hero className="mt-4 text-7xl">
         Ambition <span className="text-racing">drives</span> success.
       </h1>
-      <p data-hero className="mt-6 max-w-xl text-lg text-mute" style={{ opacity: 0 }}>
-        some info ab team
+      <p data-hero className="mt-6 max-w-xl text-lg text-mute">
+        {SITE.intro}
       </p>
+      <p data-hero className="mt-16 font-head text-xs uppercase tracking-widest text-mute">
+        Scroll to begin ↓
+      </p>
+    </section>
+  )
+}
+
+function Story() {
+  const root = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const chapters = gsap.utils.toArray<HTMLElement>('[data-chapter]', root.current!)
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top top',
+            end: '+=' + chapters.length * 100 + '%',
+            pin: true,
+            scrub: 1,
+          },
+        })
+        chapters.forEach((ch, i) => {
+          if (i !== 0) tl.to(ch, { opacity: 1, ease: 'none', duration: 1 })
+          if (i !== chapters.length - 1) tl.to(ch, { opacity: 0, ease: 'none', duration: 1 }, '+=1')
+        })
+      })
+    },
+    { scope: root },
+  )
+
+  return (
+    <section ref={root} className="story relative h-screen overflow-hidden border-y border-line">
+      {CHAPTERS.map((c) => (
+        <div
+          key={c.kicker}
+          data-chapter
+          className="chapter absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
+        >
+          <p className="font-head text-xs uppercase tracking-widest text-racing">{c.kicker}</p>
+          <h2 className="mt-4 max-w-4xl text-5xl sm:text-7xl">{c.title}</h2>
+          <p className="mt-6 max-w-xl text-lg text-mute">{c.text}</p>
+        </div>
+      ))}
+    </section>
+  )
+}
+
+function Values() {
+  const grid = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from('[data-value]', {
+          opacity: 0,
+          y: 30,
+          rotateX: -50,
+          transformOrigin: 'center bottom',
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: { each: 0.08, from: 'center' },
+          scrollTrigger: { trigger: grid.current, start: 'top 80%', once: true },
+        })
+      })
+    },
+    { scope: grid },
+  )
+
+  return (
+    <section className="mx-auto max-w-[1200px] px-6 py-24">
+      <SectionHeading eyebrow="What we stand for" title="Core values" />
+      <div ref={grid} className="perspective mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {VALUES.map((v) => (
+          <div key={v.name} data-value className="border border-line bg-graphite p-7">
+            <h3 className="text-2xl">{v.name}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-mute">{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function Stats() {
+  return (
+    <section className="border-y border-line px-6 py-24">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-8 sm:grid-cols-3">
+        {STATS.map((s) => (
+          <div key={s.label}>
+            <div className="font-display text-6xl">
+              <CountUp value={s.value} />
+              <span className="ml-1 text-3xl text-amber">{s.suffix}</span>
+            </div>
+            <p className="mt-1 font-head text-xs uppercase tracking-widest text-mute">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function JoinCta() {
+  return (
+    <section className="mx-auto max-w-[1200px] px-6 py-24 text-center">
+      <Reveal>
+        <h2 className="text-4xl sm:text-6xl">Build a racecar with us</h2>
+        <p className="mx-auto mt-5 max-w-xl text-mute">We recruit on interest and curiosity — not on your résumé.</p>
+        <a href="#" className="mt-8 inline-block bg-racing px-6 py-3 font-head text-sm font-semibold uppercase tracking-widest text-white">
+          Apply to join
+        </a>
+      </Reveal>
     </section>
   )
 }
@@ -38,10 +159,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Reveal className="px-6 py-24">
-        <h2 className="text-4xl">Next section</h2>
-        <p className="mt-4 text-mute">This one fades in when you scroll to it.</p>
-      </Reveal>
+      <Story />
+      <Values />
+      <Stats />
+      <JoinCta />
     </>
   )
 }

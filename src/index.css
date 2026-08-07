@@ -27,9 +27,27 @@ h2 {
   line-height: 0.92;
 }
 
+.perspective {
+  perspective: 1200px;
+}
+
+/* Story chapters stack on top of each other; all but the first start hidden
+   and the GSAP timeline cross-fades them as you scrub. */
+.chapter {
+  opacity: 0;
+}
+.chapter:first-child {
+  opacity: 1;
+}
+
+/* Reduced motion: no pin, no fades — chapters become normal stacked panels. */
 @media (prefers-reduced-motion: reduce) {
-  [data-hero] {
+  .story {
+    height: auto !important;
+  }
+  .chapter {
+    position: relative !important;
     opacity: 1 !important;
-    transform: none !important;
+    min-height: 100vh;
   }
 }
