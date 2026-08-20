@@ -1,32 +1,29 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { gsap, useGSAP } from '../lib/gsap'
 import Reveal from '../components/Reveal'
 import SectionHeading from '../components/SectionHeading'
 import CountUp from '../components/CountUp'
-import { SITE, VALUES, STATS, CHAPTERS } from '../data/content'
+import { SITE, STATS, CHAPTERS } from '../data/content'
+import { CORE_VALUES } from '../data/site'
+
+const base = import.meta.env.BASE_URL
 
 function Hero() {
-  const root = useRef<HTMLElement>(null)
+  const scope = useRef<HTMLElement>(null)
+  const played = useRef(false)
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia()
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.from('[data-hero]', {
-          opacity: 0,
-          y: 24,
-          duration: 0.8,
-          ease: 'power3.out',
-          stagger: 0.12,
-          delay: 0.1,
-        })
-      })
+      if (played.current) return
+      played.current = true
+      gsap.from('[data-hero]', { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.12, delay: 0.1 })
     },
-    { scope: root },
+    { scope },
   )
 
   return (
-    <section ref={root} className="flex min-h-screen flex-col justify-center px-6">
+    <section ref={scope} className="flex min-h-screen flex-col justify-center px-6">
       <p data-hero className="font-head text-xs uppercase tracking-widest text-racing">
         Northeastern University · Formula EV
       </p>
@@ -37,7 +34,7 @@ function Hero() {
         {SITE.intro}
       </p>
       <p data-hero className="mt-16 font-head text-xs uppercase tracking-widest text-mute">
-        Scroll to begin ↓
+        Scroll to begin
       </p>
     </section>
   )
@@ -71,15 +68,25 @@ function Story() {
 
   return (
     <section ref={root} className="story relative h-screen overflow-hidden border-y border-line">
-      {CHAPTERS.map((c) => (
-        <div
-          key={c.kicker}
-          data-chapter
-          className="chapter absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
-        >
-          <p className="font-head text-xs uppercase tracking-widest text-racing">{c.kicker}</p>
-          <h2 className="mt-4 max-w-4xl text-5xl sm:text-7xl">{c.title}</h2>
-          <p className="mt-6 max-w-xl text-lg text-mute">{c.text}</p>
+      {CHAPTERS.map((c, i) => (
+        <div key={c.kicker} data-chapter className="chapter absolute inset-0">
+          {/* Full-screen photo */}
+          <img
+            src={`${base}images/home/chapter-${i + 1}.jpg`}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
+          />
+          {/* Dark overlay for text legibility */}
+          <div className="absolute inset-0 bg-black/55" />
+          {/* Text on top */}
+          <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">
+            <p className="font-head text-xs uppercase tracking-widest text-racing">{c.kicker}</p>
+            <h2 className="mt-4 max-w-4xl text-5xl sm:text-7xl">{c.title}</h2>
+            <p className="mt-6 max-w-xl text-lg text-mute">{c.text}</p>
+          </div>
         </div>
       ))}
     </section>
@@ -111,8 +118,8 @@ function Values() {
   return (
     <section className="mx-auto max-w-[1200px] px-6 py-24">
       <SectionHeading eyebrow="What we stand for" title="Core values" />
-      <div ref={grid} className="perspective mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {VALUES.map((v) => (
+      <div ref={grid} className="perspective mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {CORE_VALUES.map((v) => (
           <div key={v.name} data-value className="border border-line bg-graphite p-7">
             <h3 className="text-2xl">{v.name}</h3>
             <p className="mt-3 text-sm leading-relaxed text-mute">{v.text}</p>
@@ -146,10 +153,13 @@ function JoinCta() {
     <section className="mx-auto max-w-[1200px] px-6 py-24 text-center">
       <Reveal>
         <h2 className="text-4xl sm:text-6xl">Build a racecar with us</h2>
-        <p className="mx-auto mt-5 max-w-xl text-mute">We recruit on interest and curiosity — not on your résumé.</p>
-        <a href="#" className="mt-8 inline-block bg-racing px-6 py-3 font-head text-sm font-semibold uppercase tracking-widest text-white">
-          Apply to join
-        </a>
+        <p className="mx-auto mt-5 max-w-xl text-mute">We recruit on interest and curiosity, not on your résumé.</p>
+        <Link
+          to="/join"
+          className="mt-8 inline-block bg-racing px-6 py-3 font-head text-sm font-semibold uppercase tracking-widest text-white"
+        >
+          Join the team
+        </Link>
       </Reveal>
     </section>
   )
