@@ -1,1 +1,61 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-racing: #f22e27;
+  --color-amber: #faab00;
+  --color-carbon: #1c1c1c;
+  --color-graphite: #242424;
+  --color-line: #3a3a3a;
+  --color-ink: #f4f4f4;
+  --color-mute: #a6a6a6;
+
+  --font-display: 'Anton', sans-serif;
+  --font-head: 'Barlow Condensed', sans-serif;
+  --font-sans: 'Lato', system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-carbon);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.92;
+}
+
+.perspective {
+  perspective: 1200px;
+}
+
+/* Story chapters stack on top of each other; all but the first start hidden
+   and the GSAP timeline cross-fades them as you scrub. */
+.chapter {
+  opacity: 0;
+}
+.chapter:first-child {
+  opacity: 1;
+}
+
+/* Reduced motion: no pin, no fades — chapters become normal stacked panels. */
+@media (prefers-reduced-motion: reduce) {
+  .story {
+    height: auto !important;
+  }
+  .chapter {
+    position: relative !important;
+    opacity: 1 !important;
+    min-height: 100vh;
+  }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
