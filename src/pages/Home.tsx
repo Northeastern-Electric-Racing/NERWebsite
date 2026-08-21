@@ -18,24 +18,37 @@ function Hero() {
       if (played.current) return
       played.current = true
       gsap.from('[data-hero]', { opacity: 0, y: 24, duration: 0.8, ease: 'power3.out', stagger: 0.12, delay: 0.1 })
+      gsap.from('[data-hero-img]', { opacity: 0, duration: 1.6, ease: 'power2.out', delay: 0.3, clearProps: 'opacity' })
     },
     { scope },
   )
 
   return (
-    <section ref={scope} className="flex min-h-screen flex-col justify-center px-6">
-      <p data-hero className="font-head text-xs uppercase tracking-widest text-racing">
-        Northeastern University · Formula EV
-      </p>
-      <h1 data-hero className="mt-4 text-7xl">
-        Ambition <span className="text-racing">drives</span> success.
-      </h1>
-      <p data-hero className="mt-6 max-w-xl text-lg text-mute">
-        {SITE.intro}
-      </p>
-      <p data-hero className="mt-16 font-head text-xs uppercase tracking-widest text-mute">
-        Scroll to begin
-      </p>
+    <section ref={scope} className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6">
+      <img
+        data-hero-img
+        src={`${base}images/home/hero.webp`}
+        alt=""
+        className="pointer-events-none absolute right-0 bottom-0 h-[92%] max-w-none opacity-30 brightness-110 sm:h-[102%] lg:opacity-45"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none'
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-carbon via-carbon/70 to-transparent" />
+      <div className="relative max-w-3xl">
+        <p data-hero className="font-head text-xs uppercase tracking-widest text-racing">
+          Northeastern University · Formula EV
+        </p>
+        <h1 data-hero className="mt-4 text-7xl">
+          Ambition <span className="text-racing">drives</span> success.
+        </h1>
+        <p data-hero className="mt-6 max-w-xl text-lg text-mute">
+          {SITE.intro}
+        </p>
+        <p data-hero className="mt-16 font-head text-xs uppercase tracking-widest text-mute">
+          Scroll to begin
+        </p>
+      </div>
     </section>
   )
 }

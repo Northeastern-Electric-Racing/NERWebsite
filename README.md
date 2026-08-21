@@ -28,6 +28,11 @@ npm run format
 ## Deployment
 
 Pushes to `main` are built and deployed to GitHub Pages automatically via
-`.github/workflows/deploy.yml`. The live site is served at:
+`.github/workflows/deploy.yml`.
 
-https://northeastern-electric-racing.github.io/NERWebsite/
+The build targets the root path (`base: '/'` in `vite.config.ts`), so the site is meant
+to be served from a custom domain once one is attached (Settings → Pages, plus a
+`public/CNAME` file — not yet added). Until then, the default Pages URL
+(https://northeastern-electric-racing.github.io/NERWebsite/) will render a blank page,
+since its assets are requested from `/NERWebsite/assets/...` but built for `/assets/...`.
+This is expected, not a bug.
