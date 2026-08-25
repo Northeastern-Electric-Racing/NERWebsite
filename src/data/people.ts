@@ -86,7 +86,7 @@ export const DIVISIONS: Division[] = [
         ],
       },
       {
-        name: 'Performance & Simulation',
+        name: 'Performance Analysis',
         leads: [
           p('Ash Taylor', 'Physics Modeling Lead'),
           p('Taye Byun', 'Performance Analysis Lead'),
