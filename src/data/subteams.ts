@@ -9,7 +9,7 @@ export const SUBTEAM_INFO: Record<string, string> = {
     'Develops the full aero package, including the front and rear wings, bodywork, and underbody, using CFD to balance downforce, drag, and cooling. The result is more grip through the corners without paying for it on the straights.',
   'mechanical/Powertrain':
     'Turns motor torque into motion: the drivetrain segments, transmission, battery box structure, motor cooling, and the mechanical side of the high-voltage system. The subteam packages it all to be reliable and serviceable.',
-  'mechanical/Performance & Simulation':
+  'mechanical/Performance Analysis':
     'Predicts and measures how the car actually performs. The subteam builds physics models and lap simulations, writes the tooling behind them, and turns test and competition data into design decisions.',
   'electrical/Electronics':
     'Designs the low-voltage nervous system of the car, including the custom PCBs, the vehicle control unit interfaces, the steering wheel electronics, and the boards that tie every sensor and actuator together.',
