@@ -1,29 +1,18 @@
-NER — cross-site fixes batch
-============================
-Unzip at repo ROOT (overwrites). Merges into src/.
+NER — sponsor logos (final)
+===========================
+Unzip at repo ROOT (overwrites). Self-contained: includes logos + data + page.
 
+ADDS:   public/images/sponsors/*.png  (24 white logos, web-safe names)
 OVERWRITES:
-  src/data/site.ts          - Join copy reworked, mailing list removed, 6 core values, no em dashes
-  src/data/content.ts       - Home values moved to site.ts (shared); chapter data
-  src/data/subteams.ts      - em dashes removed
-  src/data/competitions.ts  - em dashes removed (images kept)
-  src/pages/Home.tsx        - 6 shared values (was 8); chapter photo slots (local files); CTA uses router Link
-  src/pages/About.tsx       - team photo slot (local file); 6 values; no em dashes
-  src/pages/Cars.tsx        - taglines ("our first car" etc.) removed
-  src/pages/Competitions.tsx- lead text de-dashed
-  src/pages/Join.tsx        - driver line reworded, "Three steps to joining", step 1 rewritten, mailing list card removed
-  src/pages/Leadership.tsx  - E-BOARD KEEPS PHOTO CARDS; heads/leads now TEXT (no photo cards), no expand modal
-  src/pages/Division.tsx    - division switcher at top; text people list ("Name - Project", hyphen allowed here)
-  src/components/MemberCard.tsx  - plain photo card (modal + expand cue removed)
-  src/components/SubteamText.tsx - NEW: text roster for a subteam (head tagged, leads stacked)
+  src/data/sponsors.ts    - 24 sponsors with confirmed names + URLs
+  src/pages/Sponsors.tsx  - featured 3 (logo + blurb) then a logo WALL
 
-UNTOUCHED: cars.ts (25A already there), sponsors.ts, Teams/Sponsors/Navbar/App/PageHeader,
-people.ts, ScrollRow, CompModal, index.css, gsap/CountUp/Reveal/SectionHeading/Layout.
-(MemberModal.tsx and SubteamGroup.tsx are now unused but harmless.)
+Name fixes applied: westside = WS Finishing, did = Daido, diecutting = NEDC.
+URLs verified/added: Calspan, Gene Haas Foundation, OshCut, NK Labs, Schroth
+  (plus WS Finishing, Daido, NEDC and the previously-known ones).
 
-DROP-IN PHOTOS (local files you add):
-  public/images/about/team.jpg          -> About header banner
-  public/images/home/chapter-1.jpg ... chapter-4.jpg  -> Home scroll-story chapters
-  (Each is hidden until the file exists. Car/competition photos stay hotlinked as before.)
+All 24 sponsors are now linked.
 
-After unzip:  npm run build   then   npm run dev
+Diamondback Designs: no logo provided, so it is not on the page. Send a logo to add it.
+
+After unzip:  npm run build   then   npm run dev   ->  /sponsors
